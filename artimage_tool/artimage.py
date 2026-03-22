@@ -11,6 +11,10 @@ from PIL import Image
 from google import genai
 from google.genai import types
 
+from dotenv import load_dotenv
+load_dotenv()
+
+
 # --- CONFIGURATION ---
 LOCAL_ART_DIR = os.path.expanduser("~/herald-automation/artimage_tool/gallery")
 RAW_DIR = "/home/paul/TabloidProject/website/public/images/raw"
