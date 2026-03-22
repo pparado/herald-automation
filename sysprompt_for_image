@@ -1,0 +1,27 @@
+Based on the written article, create a scene description for an editorial cartoon that uses illustration, satire, caricature, and humor to reflect the content of the article.
+
+The scene must express the article's summary or main thrust. 
+
+Focus: Center on the main topic or issue to ensure clarity.
+Symbolism: Uses common symbols (e.g., a dove for peace, chains for slavery) to represent complex ideas simply.)
+Caricature: Exaggerate physical features of figures to highlight specific traits or actions.
+Satire/Irony: Employ humor or exaggeration
+Simplicity: Use direct visuals and no text to make the message immediately accessible. 
+
+Aim:
+Persuasion: To inform and humour readers.
+
+
+OLD:
+- At the end of your output, AFTER the rewritten article, generate a **single-line SCENE description** for an editorial illustration.
+- IMPORTANT: You are ONLY responsible for describing the SCENE. Do NOT include artistic style, rendering instructions, or formatting.
+- The SCENE must:
+  1. Represent the core idea using a single clear visual concept.
+  2. Use simple, symbolic or environmental elements.
+  3. Avoid real people or identifiable individuals.
+  4. Avoid multiple competing elements.
+  5. Be exactly ONE sentence.
+- Output exactly in this format:
+IMAGE_PROMPT: <one sentence only>
+
+

@@ -1,0 +1,1259 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 18 36 594 756
+%%Title: Enscript Output
+%%Creator: GNU Enscript 1.6.5.90
+%%CreationDate: Thu Mar 19 11:51:16 2026
+%%Orientation: Portrait
+%%Pages: (atend)
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: (atend)
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset Enscript-Prolog 1.6.5 90
+%
+% Procedures.
+%
+
+/_S {	% save current state
+  /_s save def
+} def
+/_R {	% restore from saved state
+  _s restore
+} def
+
+/S {	% showpage protecting gstate
+  gsave
+  showpage
+  grestore
+} bind def
+
+/MF {	% fontname newfontname -> -	make a new encoded font
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  % insert only valid encoding vectors
+  encoding_vector length 256 eq {
+    newfont /Encoding encoding_vector put
+  } if
+
+  newfontname newfont definefont pop
+} def
+
+/MF_PS { % fontname newfontname -> -	make a new font preserving its enc
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  newfontname newfont definefont pop
+} def
+
+/SF { % fontname width height -> -	set a new font
+  /height exch def
+  /width exch def
+
+  findfont
+  [width 0 0 height 0 0] makefont setfont
+} def
+
+/SUF { % fontname width height -> -	set a new user font
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF
+  /F-gs-user-font width height SF
+} def
+
+/SUF_PS { % fontname width height -> -	set a new user font preserving its enc
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF_PS
+  /F-gs-user-font width height SF
+} def
+
+/M {moveto} bind def
+/s {show} bind def
+
+/Box {	% x y w h -> -			define box path
+  /d_h exch def /d_w exch def /d_y exch def /d_x exch def
+  d_x d_y  moveto
+  d_w 0 rlineto
+  0 d_h rlineto
+  d_w neg 0 rlineto
+  closepath
+} def
+
+/bgs {	% x y height blskip gray str -> -	show string with bg color
+  /str exch def
+  /gray exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    gray setgray
+    fill
+  grestore
+  x y M str s
+} def
+
+/bgcs { % x y height blskip red green blue str -> -  show string with bg color
+  /str exch def
+  /blue exch def
+  /green exch def
+  /red exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    red green blue setrgbcolor
+    fill
+  grestore
+  x y M str s
+} def
+
+% Highlight bars.
+/highlight_bars {	% nlines lineheight output_y_margin gray -> -
+  gsave
+    setgray
+    /ymarg exch def
+    /lineheight exch def
+    /nlines exch def
+
+    % This 2 is just a magic number to sync highlight lines to text.
+    0 d_header_y ymarg sub 2 sub translate
+
+    /cw d_output_w cols div def
+    /nrows d_output_h ymarg 2 mul sub lineheight div cvi def
+
+    % for each column
+    0 1 cols 1 sub {
+      cw mul /xp exch def
+
+      % for each rows
+      0 1 nrows 1 sub {
+        /rn exch def
+        rn lineheight mul neg /yp exch def
+        rn nlines idiv 2 mod 0 eq {
+	  % Draw highlight bar.  4 is just a magic indentation.
+	  xp 4 add yp cw 8 sub lineheight neg Box fill
+	} if
+      } for
+    } for
+
+  grestore
+} def
+
+% Line highlight bar.
+/line_highlight {	% x y width height gray -> -
+  gsave
+    /gray exch def
+    Box gray setgray fill
+  grestore
+} def
+
+% Column separator lines.
+/column_lines {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h translate
+    /cw d_output_w cols div def
+    1 1 cols 1 sub {
+      cw mul 0 moveto
+      0 d_output_h rlineto stroke
+    } for
+  grestore
+} def
+
+% Column borders.
+/column_borders {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h moveto
+    0 d_output_h rlineto
+    d_output_w 0 rlineto
+    0 d_output_h neg rlineto
+    closepath stroke
+  grestore
+} def
+
+% Do the actual underlay drawing
+/draw_underlay {
+  ul_style 0 eq {
+    ul_str true charpath stroke
+  } {
+    ul_str show
+  } ifelse
+} def
+
+% Underlay
+/underlay {	% - -> -
+  gsave
+    0 d_page_h translate
+    d_page_h neg d_page_w atan rotate
+
+    ul_gray setgray
+    ul_font setfont
+    /dw d_page_h dup mul d_page_w dup mul add sqrt def
+    ul_str stringwidth pop dw exch sub 2 div ul_h_ptsize -2 div moveto
+    draw_underlay
+  grestore
+} def
+
+/user_underlay {	% - -> -
+  gsave
+    ul_x ul_y translate
+    ul_angle rotate
+    ul_gray setgray
+    ul_font setfont
+    0 0 ul_h_ptsize 2 div sub moveto
+    draw_underlay
+  grestore
+} def
+
+% Page prefeed
+/page_prefeed {		% bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} def
+
+% Wrapped line markers
+/wrapped_line_mark {	% x y charwith charheight type -> -
+  /type exch def
+  /h exch def
+  /w exch def
+  /y exch def
+  /x exch def
+
+  type 2 eq {
+    % Black boxes (like TeX does)
+    gsave
+      0 setlinewidth
+      x w 4 div add y M
+      0 h rlineto w 2 div 0 rlineto 0 h neg rlineto
+      closepath fill
+    grestore
+  } {
+    type 3 eq {
+      % Small arrows
+      gsave
+        .2 setlinewidth
+        x w 2 div add y h 2 div add M
+        w 4 div 0 rlineto
+        x w 4 div add y lineto stroke
+
+        x w 4 div add w 8 div add y h 4 div add M
+        x w 4 div add y lineto
+	w 4 div h 8 div rlineto stroke
+      grestore
+    } {
+      % do nothing
+    } ifelse
+  } ifelse
+} def
+
+% EPSF import.
+
+/BeginEPSF {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack
+  userdict begin
+  /showpage { } def
+  0 setgray 0 setlinecap
+  1 setlinewidth 0 setlinejoin
+  10 setmiterlimit [ ] 0 setdash newpath
+  /languagelevel where {
+    pop languagelevel
+    1 ne {
+      false setstrokeadjust false setoverprint
+    } if
+  } if
+} bind def
+
+/EndEPSF {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+%%EndResource
+%%BeginResource: procset Enscript-Encoding-88591 1.6.5 90
+/encoding_vector [
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclam       	/quotedbl     	/numbersign   	
+/dollar       	/percent      	/ampersand    	/quoteright   	
+/parenleft    	/parenright   	/asterisk     	/plus         	
+/comma        	/hyphen       	/period       	/slash        	
+/zero         	/one          	/two          	/three        	
+/four         	/five         	/six          	/seven        	
+/eight        	/nine         	/colon        	/semicolon    	
+/less         	/equal        	/greater      	/question     	
+/at           	/A            	/B            	/C            	
+/D            	/E            	/F            	/G            	
+/H            	/I            	/J            	/K            	
+/L            	/M            	/N            	/O            	
+/P            	/Q            	/R            	/S            	
+/T            	/U            	/V            	/W            	
+/X            	/Y            	/Z            	/bracketleft  	
+/backslash    	/bracketright 	/asciicircum  	/underscore   	
+/quoteleft    	/a            	/b            	/c            	
+/d            	/e            	/f            	/g            	
+/h            	/i            	/j            	/k            	
+/l            	/m            	/n            	/o            	
+/p            	/q            	/r            	/s            	
+/t            	/u            	/v            	/w            	
+/x            	/y            	/z            	/braceleft    	
+/bar          	/braceright   	/tilde        	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclamdown   	/cent         	/sterling     	
+/currency     	/yen          	/brokenbar    	/section      	
+/dieresis     	/copyright    	/ordfeminine  	/guillemotleft	
+/logicalnot   	/hyphen       	/registered   	/macron       	
+/degree       	/plusminus    	/twosuperior  	/threesuperior	
+/acute        	/mu           	/paragraph    	/bullet       	
+/cedilla      	/onesuperior  	/ordmasculine 	/guillemotright	
+/onequarter   	/onehalf      	/threequarters	/questiondown 	
+/Agrave       	/Aacute       	/Acircumflex  	/Atilde       	
+/Adieresis    	/Aring        	/AE           	/Ccedilla     	
+/Egrave       	/Eacute       	/Ecircumflex  	/Edieresis    	
+/Igrave       	/Iacute       	/Icircumflex  	/Idieresis    	
+/Eth          	/Ntilde       	/Ograve       	/Oacute       	
+/Ocircumflex  	/Otilde       	/Odieresis    	/multiply     	
+/Oslash       	/Ugrave       	/Uacute       	/Ucircumflex  	
+/Udieresis    	/Yacute       	/Thorn        	/germandbls   	
+/agrave       	/aacute       	/acircumflex  	/atilde       	
+/adieresis    	/aring        	/ae           	/ccedilla     	
+/egrave       	/eacute       	/ecircumflex  	/edieresis    	
+/igrave       	/iacute       	/icircumflex  	/idieresis    	
+/eth          	/ntilde       	/ograve       	/oacute       	
+/ocircumflex  	/otilde       	/odieresis    	/divide       	
+/oslash       	/ugrave       	/uacute       	/ucircumflex  	
+/udieresis    	/yacute       	/thorn        	/ydieresis    	
+] def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Courier
+/HFpt_w 10 def
+/HFpt_h 10 def
+/Courier-Bold /HF-gs-font MF
+/HF /HF-gs-font findfont [HFpt_w 0 0 HFpt_h 0 0] makefont def
+/Courier /F-gs-font MF
+/F-gs-font 10 10 SF
+/#copies 1 def
+% Pagedevice definitions:
+gs_languagelevel 1 gt {
+  <<
+    /PageSize [612 792] 
+  >> setpagedevice
+} if
+%%BeginResource: procset Enscript-Header-simple 1.6.5 90
+
+/do_header {	% print default simple header
+  gsave
+    d_header_x d_header_y HFpt_h 3 div add translate
+
+    HF setfont
+    user_header_p {
+      5 0 moveto user_header_left_str show
+
+      d_header_w user_header_center_str stringwidth pop sub 2 div
+      0 moveto user_header_center_str show
+
+      d_header_w user_header_right_str stringwidth pop sub 5 sub
+      0 moveto user_header_right_str show
+    } {
+      5 0 moveto fname show
+      45 0 rmoveto fmodstr show
+      45 0 rmoveto pagenumstr show
+    } ifelse
+
+  grestore
+} def
+%%EndResource
+/d_page_w 576 def
+/d_page_h 720 def
+/d_header_x 0 def
+/d_header_y 705 def
+/d_header_w 576 def
+/d_header_h 15 def
+/d_footer_x 0 def
+/d_footer_y 0 def
+/d_footer_w 576 def
+/d_footer_h 0 def
+/d_output_w 576 def
+/d_output_h 705 def
+/cols 1 def
+%%EndSetup
+%%Page: (1) 1
+%%BeginPageSetup
+_S
+18 36 translate
+/pagenum 1 def
+/fname (herald_editor.py) def
+/fdir (.) def
+/ftail (herald_editor.py) def
+% User defined strings:
+/fmodstr (Wed Mar 18 20:24:07 2026) def
+/pagenumstr (1) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 692 M
+(import os, sys, argparse, requests, csv) s
+5 681 M
+(from datetime import datetime) s
+5 670 M
+(from google import genai) s
+5 659 M
+(from bs4 import BeautifulSoup) s
+5 648 M
+(import PyPDF2) s
+5 637 M
+(from docx import Document) s
+5 626 M
+(from dotenv import load_dotenv  # Added this) s
+5 615 M
+(from openai import OpenAI      # Added this) s
+5 593 M
+(# Load environment variables from .env) s
+5 582 M
+(load_dotenv\(\)) s
+5 560 M
+(# Initialize Gemini Client) s
+5 549 M
+(client = genai.Client\(api_key=os.getenv\("GEMINI_API_KEY"\)\)) s
+5 538 M
+(MODEL_GEMINI = "gemini-2.5-flash-lite" ) s
+5 516 M
+(# Initialize OpenAI Client) s
+5 505 M
+(client_openai = OpenAI\(api_key=os.getenv\("OPENAI_API_KEY"\)\)) s
+5 494 M
+(MODEL_GPT = "gpt-5-nano") s
+5 472 M
+(def get_manual_input\(\):) s
+5 461 M
+(    print\("\\n" + "="*40\)) s
+5 450 M
+(    print\("       MANUAL INPUT MODE"\)) s
+5 439 M
+(    print\("="*40\)) s
+5 428 M
+(    print\("Paste your content below."\)) s
+5 417 M
+(    print\("When finished, press Ctrl+D on a NEW LINE to start."\)) s
+5 406 M
+(    print\("-" * 40 + "\\n"\)) s
+5 395 M
+(    ) s
+5 384 M
+(    try:) s
+5 373 M
+(        # sys.stdin.read\(\) captures everything until it sees the 'EOF' \(Ctrl+D\)) s
+5 362 M
+(        user_data = sys.stdin.read\(\)) s
+5 351 M
+(        if not user_data.strip\(\):) s
+5 340 M
+(            print\("Error: No text detected. Exiting."\)) s
+5 329 M
+(            sys.exit\(1\)) s
+5 318 M
+(        return user_data) s
+5 307 M
+(    except EOFError:) s
+5 296 M
+(        return "") s
+5 274 M
+(# --- THE SOX-STRICT EDITOR CONFIG ---) s
+5 263 M
+(SYSTEM_PROMPT = """You are the Lead Editor for the ELYU Herald.  ) s
+5 252 M
+(Write in a calm, community-focused, practical, and slightly conversational style.) s
+5 241 M
+(Your goal is to perform a 'Structural Transformation' of provided news.) s
+5 230 M
+(Treat the source content only as a collection of facts \(Who, What, Where, When, Why, How\).) s
+5 219 M
+(Avoid exaggeration or flowery language. Follow user instructions carefully.) s
+5 197 M
+(TRANSFORMATION RULES:) s
+5 186 M
+(1. DESTROY THE SOURCE STRUCTURE: Do not follow the original article's flow, sentence order, or) s
+5 175 M
+( paragraph structure. Rebuild the narrative from scratch.) s
+5 164 M
+(2. LOCAL ANGLE: Prioritize how this news impacts La Union or {TOWN}. If the source is national) s
+5 153 M
+(, pivot the perspective to the local community.) s
+5 142 M
+(3. VOICE: Write in a calm, community-focused, practical style. Blend dry British wit \(understa) s
+5 131 M
+(ted, self-deprecating\) with Filipino "Bayanihan" spirit \(resilient, communal, and warmly adapt) s
+5 120 M
+(ive\). Avoid "journalese" and fluff; instead, sound like a sensible local leader who can find t) s
+5 109 M
+(he silver lining in a typhoon.) s
+5 87 M
+(Deliver the news like a seasoned editor who\342\\200\\231s just stepped into a quiet pub.) s
+5 65 M
+(    The Newsroom \(Lead\): The first paragraph must be 100% "straight-laced" news. No jokes. No ) s
+5 54 M
+(fluff. Just the facts.) s
+5 32 M
+(    The Pub \(Body\): In the following paragraphs, allow for a "quick peek" into local personali) s
+5 21 M
+(ty. Use a single, dry, British-style observation or a warm Filipino communal nod.) s
+_R
+S
+%%Page: (2) 2
+%%BeginPageSetup
+_S
+18 36 translate
+/pagenum 2 def
+/fname (herald_editor.py) def
+/fdir (.) def
+/ftail (herald_editor.py) def
+% User defined strings:
+/fmodstr (Wed Mar 18 20:24:07 2026) def
+/pagenumstr (2) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 692 M
+(    The Exit: Quickly return to the practical details. The wit should be a "surgical strike"\342) s
+5 681 M
+(\\200\\224there and gone before the reader realizes you\342\\200\\231ve winked at them.) s
+5 659 M
+(You MUST use the exact {CATEGORY} and {TOWN} provided. DO NOT change them based on the article) s
+5 648 M
+( content.) s
+5 637 M
+(STRICT CATEGORY RULE: The YAML fields 'category' and 'town' are IMMUTABLE.) s
+5 626 M
+(You are permitted to use ONLY the following categories: Elyu, Regional, Weather, Features. ) s
+5 615 M
+(Do not invent new categories like 'community' or 'news'. If the input category is 'Features', ) s
+5 604 M
+(you MUST output 'Features'.) s
+5 582 M
+(If mode is WEB:) s
+5 571 M
+(- Rewrite with a strong headline \(50-70 chars\) and clear lead paragraph answering who, what, w) s
+5 560 M
+(here, when, why.) s
+5 549 M
+(- Use short paragraphs \(2\342\\200\\2233 sentences\). Include 1 relevant local angle if present.) s
+5 538 M
+(- Place main keyword in headline and first paragraph. Prefer pattern: [Topic] + [Town if any] ) s
+5 527 M
+(+ La Union) s
+5 516 M
+(- Style: active voice, explain jargon simply, attribute claims, no invented quotes.) s
+5 505 M
+(- Generate YAML front matter EXACTLY in this order. DO NOT skip any fields.) s
+5 494 M
+(  ---) s
+5 483 M
+(  title: "{TITLE_HINT}") s
+5 472 M
+(  subtitle: "{SUBTITLE_HINT}") s
+5 461 M
+(  date: "{DATE}") s
+5 450 M
+(  author: "{AUTHOR}") s
+5 439 M
+(  description: "{DESC_HINT}") s
+5 428 M
+(  tags: ["La Union", "{TOWN}"]) s
+5 417 M
+(  thumbnail: "/images/placeholder.jpg") s
+5 406 M
+(  thumbnailAlt: "Image description") s
+5 395 M
+(  caption: "Image caption") s
+5 384 M
+(  category: "{CATEGORY}" # DO NOT change this value; use the provided variable exactly.) s
+5 373 M
+(  town: "{TOWN}") s
+5 362 M
+(  status: "{STATUS}") s
+5 351 M
+(  hero: {HERO}) s
+5 340 M
+(  justInUntil: "{JUSTIN}") s
+5 329 M
+(  breakingUntil: "{BREAKING}") s
+5 318 M
+(  ---) s
+5 307 M
+(- Instructions: Use provided METADATA. If an 'Until' field is empty, use "".) s
+5 296 M
+(- Output: YAML block between --- lines followed by the rewritten article.) s
+5 274 M
+(NEW ADDITION:) s
+5 263 M
+(- At the end of your output, AFTER the rewritten article, generate a **single-line SCENE descr) s
+5 252 M
+(iption** for an editorial illustration.) s
+5 230 M
+(- IMPORTANT:) s
+5 219 M
+(  You are ONLY responsible for describing the SCENE.) s
+5 208 M
+(  Do NOT include artistic style, rendering instructions, or formatting.) s
+5 186 M
+(- The SCENE must:) s
+5 175 M
+(  1. Represent the core idea using a single clear visual concept.) s
+5 164 M
+(  2. Use simple, symbolic or environmental elements.) s
+5 153 M
+(  3. Avoid real people or identifiable individuals.) s
+5 142 M
+(  4. Avoid multiple competing elements.) s
+5 131 M
+(  5. Be exactly ONE sentence.) s
+5 109 M
+(- Think like a newspaper illustrator receiving a quick brief.) s
+5 87 M
+(- Output exactly in this format:) s
+5 65 M
+(IMAGE_PROMPT: <one sentence only>) s
+5 43 M
+(- FINALLY, provide a 3-word hyphenated slug for the filename.) s
+5 32 M
+(- Format: SLUG: word-word-word) s
+5 10 M
+(If mode is PRINT:) s
+_R
+S
+%%Page: (3) 3
+%%BeginPageSetup
+_S
+18 36 translate
+/pagenum 3 def
+/fname (herald_editor.py) def
+/fdir (.) def
+/ftail (herald_editor.py) def
+% User defined strings:
+/fmodstr (Wed Mar 18 20:24:07 2026) def
+/pagenumstr (3) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 692 M
+(- Rewrite for print edition using same voice and structure.) s
+5 681 M
+(- TARGET LENGTH: Approximately {TARGET_WORDS} words.) s
+5 670 M
+(- Style: active voice, explain jargon simply, attribute claims to sources, optional gentle nar) s
+5 659 M
+(rative flow.) s
+5 648 M
+(- Output: rewritten article only, byline "By {AUTHOR}".) s
+5 637 M
+(""") s
+5 615 M
+(TOWNS = [) s
+5 604 M
+(    "Agoo", "Aringay", "Bacnotan", "Bagulin", "Balaoan", "Bangar", "Bauang", "Burgos", ) s
+5 593 M
+(    "Caba", "Luna", "Naguilian", "Pugo", "Rosario", "San Gabriel", "San Juan", ) s
+5 582 M
+(    "Santol", "Santo Tomas", "Sudipen", "Tubao", "San Fernando") s
+5 571 M
+(]) s
+5 549 M
+(def get_interactive_metadata\(mode\):) s
+5 538 M
+(    print\(f"\\n\360\\237\\223\\235 --- ELYU HERALD {mode.upper\(\)} PRE-FLIGHT ---"\)) s
+5 527 M
+(    author = input\("Author Name \(Enter for Staff\): "\).strip\(\) or "ELYU Herald Staff") s
+5 516 M
+(    meta = {"author": author}) s
+5 494 M
+(    is_original = input\("Was this an original story? \(y/n\): "\).lower\(\) == 'y') s
+5 483 M
+(    if not is_original:) s
+5 472 M
+(        meta["attr_name"] = input\("Who do we attribute it to? \(e.g., PGLU\): "\).strip\(\)) s
+5 461 M
+(        meta["attr_url"] = input\("What is the source URL?: "\).strip\(\)) s
+5 450 M
+(    else:) s
+5 439 M
+(        meta["attr_name"] = None) s
+5 417 M
+(    if mode == "web":) s
+5 406 M
+(        print\("\\nCategory: 1. Elyu | 2. Regional | 3. Weather | 4. Features"\)) s
+5 395 M
+(        cats = {"1": "Elyu", "2": "Regional", "3": "Weather", "4": "Features"}) s
+5 384 M
+(        meta["category"] = cats.get\(input\("Choice: "\), "Elyu"\)) s
+5 362 M
+(        meta["town"] = "La Union") s
+5 351 M
+(        if meta["category"] == "Elyu":) s
+5 340 M
+(            print\("\\nSelect Town \(1-19\):"\)) s
+5 329 M
+(            # --- SHARPENED TOWN LABELS ---) s
+5 318 M
+(            labels = {) s
+5 307 M
+(                "San Fernando": "SF",) s
+5 296 M
+(                "San Gabriel": "SG",) s
+5 285 M
+(                "San Juan": "SJ",) s
+5 274 M
+(                "Santol": "STL",) s
+5 263 M
+(                "Santo Tomas": "ST"  # Quick key for the full name) s
+5 252 M
+(            }) s
+5 241 M
+(            for i, t in enumerate\(TOWNS, 1\):) s
+5 230 M
+(                # Use the custom label if it exists, otherwise use the first 3 letters) s
+5 219 M
+(                lbl = labels.get\(t, t[:3]\)) s
+5 208 M
+(                print\(f"{i}.{lbl}", end="\\t" if i % 5 != 0 else "\\n"\)) s
+5 197 M
+(            ) s
+5 186 M
+(            try: meta["town"] = TOWNS[int\(input\("\\nChoice: "\)\)-1]) s
+5 175 M
+(            except: pass) s
+5 153 M
+(        print\("\\nStatus: 1. Just In | 2. Live | 3. Breaking | 4. Published"\)) s
+5 142 M
+(        stats = {"1": "just-in", "2": "live", "3": "breaking", "4": "published"}) s
+5 131 M
+(        meta["status"] = stats.get\(input\("Choice: "\), "published"\)) s
+5 109 M
+(        meta["until_ts"] = "") s
+5 98 M
+(        if meta["status"] in ["just-in", "breaking"]:) s
+5 87 M
+(            ts_input = input\("Expiry \(YYYY-MM-DD HH:mm\): "\).strip\(\)) s
+5 76 M
+(            if ts_input:) s
+5 65 M
+(                try: meta["until_ts"] = datetime.strptime\(ts_input, "%Y-%m-%d %H:%M"\).strftime) s
+5 54 M
+(\("%Y-%m-%dT%H:%M:00+08:00"\)) s
+5 43 M
+(                except: print\("\342\\232\240\357\270\\217 Format error."\)) s
+5 21 M
+(        meta["hero"] = str\(input\("\\nSet as Hero? \(y/n\): "\).lower\(\) == 'y'\).lower\(\)) s
+5 10 M
+(    else:) s
+_R
+S
+%%Page: (4) 4
+%%BeginPageSetup
+_S
+18 36 translate
+/pagenum 4 def
+/fname (herald_editor.py) def
+/fdir (.) def
+/ftail (herald_editor.py) def
+% User defined strings:
+/fmodstr (Wed Mar 18 20:24:07 2026) def
+/pagenumstr (4) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 692 M
+(        meta["target_words"] = input\("Target word count for layout: "\).strip\(\) or "300") s
+5 670 M
+(    return meta) s
+5 648 M
+(def extract_text\(p\):) s
+5 637 M
+(    if p.startswith\(\('http://', 'https://'\)\):) s
+5 626 M
+(        try:) s
+5 615 M
+(            r = requests.get\(p, timeout=15, headers={'User-Agent': 'Mozilla/5.0'}\)) s
+5 604 M
+(            r.raise_for_status\(\)) s
+5 593 M
+(            soup = BeautifulSoup\(r.text, 'html.parser'\)) s
+5 582 M
+(            content = soup.find\('article'\) or soup.find\('main'\) or soup.find\('body'\)) s
+5 571 M
+(            return content.get_text\(separator=' ', strip=True\)) s
+5 560 M
+(        except Exception as e: return f"\342\\235\\214 URL Error: {e}") s
+5 549 M
+(    ) s
+5 538 M
+(    ext = os.path.splitext\(p\)[1].lower\(\)) s
+5 527 M
+(    try:) s
+5 516 M
+(        if ext == ".pdf":) s
+5 505 M
+(            return "".join\(pg.extract_text\(\) or "" for pg in PyPDF2.PdfReader\(p\).pages\)) s
+5 494 M
+(        if ext == ".docx":) s
+5 483 M
+(            return "\\n".join\(pa.text for pa in Document\(p\).paragraphs\)) s
+5 472 M
+(        with open\(p, "r", encoding="utf-8"\) as f: return f.read\(\)) s
+5 461 M
+(    except Exception as e: return f"\342\\235\\214 File Error: {e}") s
+5 439 M
+(def process\(mode, src, ai_choice="gemini"\):) s
+5 428 M
+(    # If the 'src' looks like actual content \(has spaces/newlines\) and isn't a URL) s
+5 417 M
+(    if not src.startswith\(\('http://', 'https://'\)\) and \(len\(src\) > 255 or '\\n' in src\):) s
+5 406 M
+(        raw_txt = src  # It's already the text!) s
+5 395 M
+(    else:) s
+5 384 M
+(        raw_txt = extract_text\(src\) # Try to treat it as a URL or File) s
+5 373 M
+(    ) s
+5 362 M
+(    if not raw_txt or raw_txt.startswith\("\342\\235\\214"\): return print\(raw_txt\)) s
+5 351 M
+(    ) s
+5 340 M
+(    ) s
+5 329 M
+(    orig_count = len\(raw_txt.split\(\)\)) s
+5 318 M
+(    tag = "web" if mode == "--web" else "print") s
+5 307 M
+(    meta = get_interactive_metadata\(tag\)) s
+5 296 M
+(    now = datetime.now\(\).strftime\("%Y-%m-%d %H:%M"\)) s
+5 285 M
+(    ) s
+5 274 M
+(    just_in = meta.get\('until_ts'\) if meta.get\('status'\) == 'just-in' else "") s
+5 263 M
+(    breaking = meta.get\('until_ts'\) if meta.get\('status'\) == 'breaking' else "") s
+5 241 M
+(    formatted_sys_prompt = SYSTEM_PROMPT.format\() s
+5 230 M
+(        TITLE_HINT="50-70 character headline",) s
+5 219 M
+(        SUBTITLE_HINT="80-100 character summary",) s
+5 208 M
+(        DESC_HINT="120-160 character SEO description",) s
+5 197 M
+(        DATE=now,) s
+5 186 M
+(        AUTHOR=meta['author'],) s
+5 175 M
+(        TOWN=meta.get\('town', 'La Union'\).lower\(\).replace\(" ", "-"\),) s
+5 164 M
+(        CATEGORY=meta.get\('category', 'Elyu'\).lower\(\),) s
+5 153 M
+(        STATUS=meta.get\('status', 'published'\),) s
+5 142 M
+(        HERO=meta.get\('hero', 'false'\),) s
+5 131 M
+(        JUSTIN=just_in,) s
+5 120 M
+(        BREAKING=breaking,) s
+5 109 M
+(        TARGET_WORDS=meta.get\('target_words', 'N/A'\)) s
+5 98 M
+(    \)) s
+5 76 M
+(    prompt = f"MODE: {tag.upper\(\)}. Date: {now}. Source Content:\\n\\n{raw_txt}") s
+5 54 M
+(    try:) s
+5 43 M
+(        # --- NEW API SWITCHER ---) s
+5 32 M
+(        if ai_choice == "gpt":) s
+5 21 M
+(            response = client_openai.chat.completions.create\() s
+5 10 M
+(                model=MODEL_GPT,) s
+_R
+S
+%%Page: (5) 5
+%%BeginPageSetup
+_S
+18 36 translate
+/pagenum 5 def
+/fname (herald_editor.py) def
+/fdir (.) def
+/ftail (herald_editor.py) def
+% User defined strings:
+/fmodstr (Wed Mar 18 20:24:07 2026) def
+/pagenumstr (5) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 692 M
+(                messages=[) s
+5 681 M
+(                    {"role": "system", "content": formatted_sys_prompt},) s
+5 670 M
+(                    {"role": "user", "content": prompt}) s
+5 659 M
+(                ],) s
+5 648 M
+(                ) s
+5 637 M
+(            \)) s
+5 626 M
+(            full_res = response.choices[0].message.content.strip\(\)) s
+5 615 M
+(            in_t = response.usage.prompt_tokens) s
+5 604 M
+(            out_t = response.usage.completion_tokens) s
+5 593 M
+(            model_used = MODEL_GPT) s
+5 582 M
+(        else:) s
+5 571 M
+(            response = client.models.generate_content\() s
+5 560 M
+(                model=MODEL_GEMINI, contents=prompt,) s
+5 549 M
+(                config={"system_instruction": formatted_sys_prompt, "temperature": 0.2}) s
+5 538 M
+(            \)) s
+5 527 M
+(            full_res = response.text.strip\(\)) s
+5 516 M
+(            in_t = response.usage_metadata.prompt_token_count) s
+5 505 M
+(            out_t = response.usage_metadata.candidates_token_count) s
+5 494 M
+(            model_used = MODEL_GEMINI) s
+5 483 M
+(        # --- END OF SWITCHER ---) s
+5 461 M
+(        # --- THE BOUNCER \(Source Content Verification\) ---) s
+5 450 M
+(        import re) s
+5 439 M
+(        from collections import Counter) s
+5 428 M
+(        ) s
+5 417 M
+(        # 1. Identify "DNA" from the source \(using raw_txt\)) s
+5 406 M
+(        words = re.findall\(r'\\w+', raw_txt.lower\(\)\)) s
+5 395 M
+(        stopwords = {'the', 'and', 'that', 'with', 'from', 'this', 'your', 'about', 'news', 'o) s
+5 384 M
+(riginal'}) s
+5 373 M
+(        anchors = [word for word, count in Counter\(w for w in words if len\(w\) > 3 and w not in) s
+5 362 M
+( stopwords\).most_common\(5\)]) s
+5 351 M
+(        ) s
+5 340 M
+(        # 2. Check if at least 2 anchors made it into the rewrite) s
+5 329 M
+(        matches = [a for a in anchors if a in full_res.lower\(\)]) s
+5 318 M
+(        ) s
+5 307 M
+(        if len\(matches\) < 2:) s
+5 296 M
+(            print\(f"\\n\360\\237\\233\\221 [Sox-Strict Hallucination Alert!]"\)) s
+5 285 M
+(            print\(f"   Source Anchors \(Expected\): {', '.join\(anchors\)}"\)) s
+5 274 M
+(            print\(f"   Matches Found in Rewrite: {', '.join\(matches\) if matches else 'NONE'}"\)) s
+5 263 M
+(            print\("-" * 45\)) s
+5 252 M
+(            confirm = input\("\342\\232\240\357\270\\217 This rewrite looks off-topic. Save anyway? \(y/n\): "\)) s
+5 241 M
+(            if confirm.lower\(\) != 'y':) s
+5 230 M
+(                print\("\342\\235\\214 Aborted. The 'Clean Empire' remains untainted."\)) s
+5 219 M
+(                return ) s
+5 208 M
+(        # --- END OF THE BOUNCER ---) s
+5 197 M
+(        ) s
+5 186 M
+(        slug = "untitled-article") s
+5 175 M
+(        if "SLUG:" in full_res:) s
+5 164 M
+(            res_parts = full_res.split\("SLUG:"\)) s
+5 153 M
+(            final_article = res_parts[0].strip\(\)) s
+5 142 M
+(            slug_raw = res_parts[1].strip\(\).split\('\\n'\)[0]) s
+5 131 M
+(            slug = slug_raw.replace\('"', ''\).replace\(':', ''\).replace\(' ', '-'\).lower\(\)) s
+5 120 M
+(        else: ) s
+5 109 M
+(            final_article = full_res) s
+5 87 M
+(        attr_footer = "") s
+5 76 M
+(        if meta.get\("attr_name"\) and meta.get\("attr_url"\):) s
+5 65 M
+(            attr_footer = f"\\n\\n---\\n\\n**SOURCE:** [{meta['attr_name']}]\({meta['attr_url']}\)") s
+5 43 M
+(        script_dir = os.path.dirname\(os.path.abspath\(__file__\)\)) s
+5 32 M
+(        out_dir = os.path.join\(script_dir, "outputs"\)) s
+5 21 M
+(        if not os.path.exists\(out_dir\): os.makedirs\(out_dir\)) s
+_R
+S
+%%Page: (6) 6
+%%BeginPageSetup
+_S
+18 36 translate
+/pagenum 6 def
+/fname (herald_editor.py) def
+/fdir (.) def
+/ftail (herald_editor.py) def
+% User defined strings:
+/fmodstr (Wed Mar 18 20:24:07 2026) def
+/pagenumstr (6) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 692 M
+(        new_count = len\(final_article.split\(\)\)) s
+5 681 M
+(        header = f"Original: {orig_count} words | Target: {meta.get\('target_words', 'N/A'\)} wo) s
+5 670 M
+(rds\\n\\n") s
+5 659 M
+(        footer = f"\\n\\nFinal Word Count: {new_count}") s
+5 637 M
+(        filename = os.path.join\(out_dir, f"{tag}_{slug}.md"\)) s
+5 626 M
+(        with open\(filename, "w", encoding="utf-8"\) as f: ) s
+5 615 M
+(            f.write\(header + final_article + attr_footer + footer\)) s
+5 593 M
+(        # --- THE 9-COLUMN AUDIT & LOGGING ---) s
+5 582 M
+(        rates = {) s
+5 571 M
+(            MODEL_GEMINI: {"in": 0.10/1_000_000, "out": 0.40/1_000_000},) s
+5 560 M
+(            MODEL_GPT: {"in": 0.05/1_000_000, "out": 0.40/1_000_000}) s
+5 549 M
+(        }) s
+5 538 M
+(        r = rates.get\(model_used, rates[MODEL_GEMINI]\)) s
+5 527 M
+(        ) s
+5 516 M
+(        in_cost = in_t * r["in"]) s
+5 505 M
+(        out_cost = out_t * r["out"]) s
+5 494 M
+(        total_c = in_cost + out_cost) s
+5 483 M
+(        tot_tokens = in_t + out_t) s
+5 461 M
+(        log_file = os.path.join\(out_dir, "gemini_cost_log.csv"\)) s
+5 450 M
+(        headers = ["timestamp", "Model", "mode", "input_tokens", "output_tokens", "total_token) s
+5 439 M
+(s", "input_cost", "output_cost", "total_cost"]) s
+5 428 M
+(        file_exists = os.path.isfile\(log_file\)) s
+5 417 M
+(        ) s
+5 406 M
+(        with open\(log_file, "a", newline=""\) as f:) s
+5 395 M
+(            writer = csv.writer\(f\)) s
+5 384 M
+(            if not file_exists: writer.writerow\(headers\)) s
+5 373 M
+(            writer.writerow\([) s
+5 362 M
+(                datetime.now\(\).strftime\("%Y-%m-%d %H:%M"\), ) s
+5 351 M
+(                model_used, tag.upper\(\), in_t, out_t, tot_tokens, ) s
+5 340 M
+(                f"{in_cost:.6f}", f"{out_cost:.6f}", f"{total_c:.6f}") s
+5 329 M
+(            ]\)) s
+5 307 M
+(        print\("\\n" + "\342\\225\\220"*45\)) s
+5 296 M
+(        print\(f"\360\\237\\222\260 AUDIT \({model_used}\)"\)) s
+5 285 M
+(        print\(f"   In: {in_t} | Out: {out_t} | Total: {tot_tokens}"\)) s
+5 274 M
+(        print\(f"   Cost: ${total_c:.6f}"\)) s
+5 263 M
+(        print\(f"\342\\234\\205 Saved: {os.path.relpath\(filename\)} \({new_count} words\)"\)) s
+5 252 M
+(        print\("\342\\225\\220"*45\)) s
+5 230 M
+(    except Exception as e: print\(f"\342\\235\\214 Error: {e}"\)) s
+5 208 M
+(if __name__ == "__main__":) s
+5 197 M
+(    parser = argparse.ArgumentParser\(description="ELYU Herald Automation"\)) s
+5 186 M
+(    ) s
+5 175 M
+(    # We make these 'store_true' so they don't look for an extra word) s
+5 164 M
+(    parser.add_argument\("--web", action="store_true", help="Format for Web"\)) s
+5 153 M
+(    parser.add_argument\("--print", action="store_true", help="Format for Print"\)) s
+5 142 M
+(    parser.add_argument\("--manual", action="store_true", help="Manual text input"\)) s
+5 131 M
+(    ) s
+5 120 M
+(    # Optional driver \(gpt\) and source \(URL/File\)) s
+5 109 M
+(    parser.add_argument\("driver", nargs="?", default="gemini"\)) s
+5 98 M
+(    parser.add_argument\("source", nargs="?", default=None\)) s
+5 76 M
+(    args = parser.parse_args\(\)) s
+5 54 M
+(    # --- BRAIN & SOURCE LOGIC ---) s
+5 43 M
+(    if args.driver.lower\(\) == "gpt":) s
+5 32 M
+(        ai_choice = "gpt") s
+5 21 M
+(        actual_source = args.source) s
+5 10 M
+(    else:) s
+_R
+S
+%%Page: (7) 7
+%%BeginPageSetup
+_S
+18 36 translate
+/pagenum 7 def
+/fname (herald_editor.py) def
+/fdir (.) def
+/ftail (herald_editor.py) def
+% User defined strings:
+/fmodstr (Wed Mar 18 20:24:07 2026) def
+/pagenumstr (7) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 692 M
+(        ai_choice = "gemini") s
+5 681 M
+(        actual_source = args.driver) s
+5 659 M
+(    # Determine the tag for the process function) s
+5 648 M
+(    mode_tag = "--print" if args.print else "--web") s
+5 626 M
+(    if args.manual:) s
+5 615 M
+(        # If --manual is used, we ignore the source argument and trigger the paste box) s
+5 604 M
+(        content = get_manual_input\(\)) s
+5 593 M
+(        process\(mode_tag, content, ai_choice\)) s
+5 582 M
+(    elif actual_source:) s
+5 571 M
+(        process\(mode_tag, actual_source, ai_choice\)) s
+5 560 M
+(    else:) s
+5 549 M
+(        print\("\342\\235\\214 Error: Please provide a URL/File or use --manual"\)) s
+_R
+S
+%%Trailer
+%%Pages: 7
+%%DocumentNeededResources: font Courier-Bold Courier 
+%%EOF

@@ -1,0 +1,1021 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 18 36 594 756
+%%Title: Enscript Output
+%%Creator: GNU Enscript 1.6.5.90
+%%CreationDate: Thu Mar 19 12:01:59 2026
+%%Orientation: Portrait
+%%Pages: (atend)
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: (atend)
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset Enscript-Prolog 1.6.5 90
+%
+% Procedures.
+%
+
+/_S {	% save current state
+  /_s save def
+} def
+/_R {	% restore from saved state
+  _s restore
+} def
+
+/S {	% showpage protecting gstate
+  gsave
+  showpage
+  grestore
+} bind def
+
+/MF {	% fontname newfontname -> -	make a new encoded font
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  % insert only valid encoding vectors
+  encoding_vector length 256 eq {
+    newfont /Encoding encoding_vector put
+  } if
+
+  newfontname newfont definefont pop
+} def
+
+/MF_PS { % fontname newfontname -> -	make a new font preserving its enc
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  newfontname newfont definefont pop
+} def
+
+/SF { % fontname width height -> -	set a new font
+  /height exch def
+  /width exch def
+
+  findfont
+  [width 0 0 height 0 0] makefont setfont
+} def
+
+/SUF { % fontname width height -> -	set a new user font
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF
+  /F-gs-user-font width height SF
+} def
+
+/SUF_PS { % fontname width height -> -	set a new user font preserving its enc
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF_PS
+  /F-gs-user-font width height SF
+} def
+
+/M {moveto} bind def
+/s {show} bind def
+
+/Box {	% x y w h -> -			define box path
+  /d_h exch def /d_w exch def /d_y exch def /d_x exch def
+  d_x d_y  moveto
+  d_w 0 rlineto
+  0 d_h rlineto
+  d_w neg 0 rlineto
+  closepath
+} def
+
+/bgs {	% x y height blskip gray str -> -	show string with bg color
+  /str exch def
+  /gray exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    gray setgray
+    fill
+  grestore
+  x y M str s
+} def
+
+/bgcs { % x y height blskip red green blue str -> -  show string with bg color
+  /str exch def
+  /blue exch def
+  /green exch def
+  /red exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    red green blue setrgbcolor
+    fill
+  grestore
+  x y M str s
+} def
+
+% Highlight bars.
+/highlight_bars {	% nlines lineheight output_y_margin gray -> -
+  gsave
+    setgray
+    /ymarg exch def
+    /lineheight exch def
+    /nlines exch def
+
+    % This 2 is just a magic number to sync highlight lines to text.
+    0 d_header_y ymarg sub 2 sub translate
+
+    /cw d_output_w cols div def
+    /nrows d_output_h ymarg 2 mul sub lineheight div cvi def
+
+    % for each column
+    0 1 cols 1 sub {
+      cw mul /xp exch def
+
+      % for each rows
+      0 1 nrows 1 sub {
+        /rn exch def
+        rn lineheight mul neg /yp exch def
+        rn nlines idiv 2 mod 0 eq {
+	  % Draw highlight bar.  4 is just a magic indentation.
+	  xp 4 add yp cw 8 sub lineheight neg Box fill
+	} if
+      } for
+    } for
+
+  grestore
+} def
+
+% Line highlight bar.
+/line_highlight {	% x y width height gray -> -
+  gsave
+    /gray exch def
+    Box gray setgray fill
+  grestore
+} def
+
+% Column separator lines.
+/column_lines {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h translate
+    /cw d_output_w cols div def
+    1 1 cols 1 sub {
+      cw mul 0 moveto
+      0 d_output_h rlineto stroke
+    } for
+  grestore
+} def
+
+% Column borders.
+/column_borders {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h moveto
+    0 d_output_h rlineto
+    d_output_w 0 rlineto
+    0 d_output_h neg rlineto
+    closepath stroke
+  grestore
+} def
+
+% Do the actual underlay drawing
+/draw_underlay {
+  ul_style 0 eq {
+    ul_str true charpath stroke
+  } {
+    ul_str show
+  } ifelse
+} def
+
+% Underlay
+/underlay {	% - -> -
+  gsave
+    0 d_page_h translate
+    d_page_h neg d_page_w atan rotate
+
+    ul_gray setgray
+    ul_font setfont
+    /dw d_page_h dup mul d_page_w dup mul add sqrt def
+    ul_str stringwidth pop dw exch sub 2 div ul_h_ptsize -2 div moveto
+    draw_underlay
+  grestore
+} def
+
+/user_underlay {	% - -> -
+  gsave
+    ul_x ul_y translate
+    ul_angle rotate
+    ul_gray setgray
+    ul_font setfont
+    0 0 ul_h_ptsize 2 div sub moveto
+    draw_underlay
+  grestore
+} def
+
+% Page prefeed
+/page_prefeed {		% bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} def
+
+% Wrapped line markers
+/wrapped_line_mark {	% x y charwith charheight type -> -
+  /type exch def
+  /h exch def
+  /w exch def
+  /y exch def
+  /x exch def
+
+  type 2 eq {
+    % Black boxes (like TeX does)
+    gsave
+      0 setlinewidth
+      x w 4 div add y M
+      0 h rlineto w 2 div 0 rlineto 0 h neg rlineto
+      closepath fill
+    grestore
+  } {
+    type 3 eq {
+      % Small arrows
+      gsave
+        .2 setlinewidth
+        x w 2 div add y h 2 div add M
+        w 4 div 0 rlineto
+        x w 4 div add y lineto stroke
+
+        x w 4 div add w 8 div add y h 4 div add M
+        x w 4 div add y lineto
+	w 4 div h 8 div rlineto stroke
+      grestore
+    } {
+      % do nothing
+    } ifelse
+  } ifelse
+} def
+
+% EPSF import.
+
+/BeginEPSF {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack
+  userdict begin
+  /showpage { } def
+  0 setgray 0 setlinecap
+  1 setlinewidth 0 setlinejoin
+  10 setmiterlimit [ ] 0 setdash newpath
+  /languagelevel where {
+    pop languagelevel
+    1 ne {
+      false setstrokeadjust false setoverprint
+    } if
+  } if
+} bind def
+
+/EndEPSF {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+%%EndResource
+%%BeginResource: procset Enscript-Encoding-88591 1.6.5 90
+/encoding_vector [
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclam       	/quotedbl     	/numbersign   	
+/dollar       	/percent      	/ampersand    	/quoteright   	
+/parenleft    	/parenright   	/asterisk     	/plus         	
+/comma        	/hyphen       	/period       	/slash        	
+/zero         	/one          	/two          	/three        	
+/four         	/five         	/six          	/seven        	
+/eight        	/nine         	/colon        	/semicolon    	
+/less         	/equal        	/greater      	/question     	
+/at           	/A            	/B            	/C            	
+/D            	/E            	/F            	/G            	
+/H            	/I            	/J            	/K            	
+/L            	/M            	/N            	/O            	
+/P            	/Q            	/R            	/S            	
+/T            	/U            	/V            	/W            	
+/X            	/Y            	/Z            	/bracketleft  	
+/backslash    	/bracketright 	/asciicircum  	/underscore   	
+/quoteleft    	/a            	/b            	/c            	
+/d            	/e            	/f            	/g            	
+/h            	/i            	/j            	/k            	
+/l            	/m            	/n            	/o            	
+/p            	/q            	/r            	/s            	
+/t            	/u            	/v            	/w            	
+/x            	/y            	/z            	/braceleft    	
+/bar          	/braceright   	/tilde        	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclamdown   	/cent         	/sterling     	
+/currency     	/yen          	/brokenbar    	/section      	
+/dieresis     	/copyright    	/ordfeminine  	/guillemotleft	
+/logicalnot   	/hyphen       	/registered   	/macron       	
+/degree       	/plusminus    	/twosuperior  	/threesuperior	
+/acute        	/mu           	/paragraph    	/bullet       	
+/cedilla      	/onesuperior  	/ordmasculine 	/guillemotright	
+/onequarter   	/onehalf      	/threequarters	/questiondown 	
+/Agrave       	/Aacute       	/Acircumflex  	/Atilde       	
+/Adieresis    	/Aring        	/AE           	/Ccedilla     	
+/Egrave       	/Eacute       	/Ecircumflex  	/Edieresis    	
+/Igrave       	/Iacute       	/Icircumflex  	/Idieresis    	
+/Eth          	/Ntilde       	/Ograve       	/Oacute       	
+/Ocircumflex  	/Otilde       	/Odieresis    	/multiply     	
+/Oslash       	/Ugrave       	/Uacute       	/Ucircumflex  	
+/Udieresis    	/Yacute       	/Thorn        	/germandbls   	
+/agrave       	/aacute       	/acircumflex  	/atilde       	
+/adieresis    	/aring        	/ae           	/ccedilla     	
+/egrave       	/eacute       	/ecircumflex  	/edieresis    	
+/igrave       	/iacute       	/icircumflex  	/idieresis    	
+/eth          	/ntilde       	/ograve       	/oacute       	
+/ocircumflex  	/otilde       	/odieresis    	/divide       	
+/oslash       	/ugrave       	/uacute       	/ucircumflex  	
+/udieresis    	/yacute       	/thorn        	/ydieresis    	
+] def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Courier
+/HFpt_w 10 def
+/HFpt_h 10 def
+/Courier-Bold /HF-gs-font MF
+/HF /HF-gs-font findfont [HFpt_w 0 0 HFpt_h 0 0] makefont def
+/Courier /F-gs-font MF
+/F-gs-font 10 10 SF
+/#copies 1 def
+% Pagedevice definitions:
+gs_languagelevel 1 gt {
+  <<
+    /PageSize [612 792] 
+  >> setpagedevice
+} if
+%%BeginResource: procset Enscript-Header-simple 1.6.5 90
+
+/do_header {	% print default simple header
+  gsave
+    d_header_x d_header_y HFpt_h 3 div add translate
+
+    HF setfont
+    user_header_p {
+      5 0 moveto user_header_left_str show
+
+      d_header_w user_header_center_str stringwidth pop sub 2 div
+      0 moveto user_header_center_str show
+
+      d_header_w user_header_right_str stringwidth pop sub 5 sub
+      0 moveto user_header_right_str show
+    } {
+      5 0 moveto fname show
+      45 0 rmoveto fmodstr show
+      45 0 rmoveto pagenumstr show
+    } ifelse
+
+  grestore
+} def
+%%EndResource
+/d_page_w 576 def
+/d_page_h 720 def
+/d_header_x 0 def
+/d_header_y 705 def
+/d_header_w 576 def
+/d_header_h 15 def
+/d_footer_x 0 def
+/d_footer_y 0 def
+/d_footer_w 576 def
+/d_footer_h 0 def
+/d_output_w 576 def
+/d_output_h 705 def
+/cols 1 def
+%%EndSetup
+%%Page: (1) 1
+%%BeginPageSetup
+_S
+18 36 translate
+/pagenum 1 def
+/fname (artimage.py) def
+/fdir (.) def
+/ftail (artimage.py) def
+% User defined strings:
+/fmodstr (Thu Mar 19 00:09:57 2026) def
+/pagenumstr (1) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 692 M
+(import os) s
+5 681 M
+(import requests) s
+5 670 M
+(import time) s
+5 659 M
+(import sys) s
+5 648 M
+(import csv) s
+5 637 M
+(import argparse) s
+5 626 M
+(from datetime import datetime) s
+5 615 M
+(from google import genai) s
+5 604 M
+(from google.genai import types) s
+5 582 M
+(# --- Configuration ---) s
+5 571 M
+(GEMINI_API_KEY = os.getenv\("GEMINI_API_KEY"\)) s
+5 560 M
+(OUTPUT_DIR = os.path.expanduser\("~/herald-automation/outputs"\)) s
+5 549 M
+(WEB_BASE_DIR = "/home/paul/TabloidProject/website" ) s
+5 538 M
+(RAW_DIR = f"{WEB_BASE_DIR}/public/images/raw") s
+5 527 M
+(LOCAL_ART_DIR = os.path.expanduser\("~/herald-automation/artimage_tool/gallery"\)) s
+5 505 M
+(# --- STYLE BLOCK ---) s
+5 494 M
+(STYLE_BLOCK = """Generally black-and-white editorial newspaper illustration. Clean, confident ) s
+5 483 M
+(line art with medium line weight. Minimal shading, minimal gradients, light colour only to emp) s
+5 472 M
+(hasize main subject. High contrast. Average amount of detail. Simple composition with a single) s
+5 461 M
+( clear subject. Ample white space. Calm, observational tone. Consistent style as if drawn by t) s
+5 450 M
+(he same newspaper illustrator. Single subject only. No background clutter. No text.""") s
+5 406 M
+(# Initialize Gemini Client) s
+5 395 M
+(client = genai.Client\(api_key=GEMINI_API_KEY\)) s
+5 373 M
+(os.makedirs\(LOCAL_ART_DIR, exist_ok=True\)) s
+5 362 M
+(os.makedirs\(RAW_DIR, exist_ok=True\)) s
+5 340 M
+(def sweating_spinner\(duration\):) s
+5 329 M
+(    """A bit of visual flair while the Funhouse PC toils away.""") s
+5 318 M
+(    chars = ["\342\240\\213", "\342\240\\231", "\342\240\271", "\342\240\270", "\342\240\274", "\342\240\264", "\342\240\246", "\342\240\247", "\342\240\\207", "\342\240\\217"]) s
+5 307 M
+(    end_time = time.time\(\) + duration) s
+5 296 M
+(    i = 0) s
+5 285 M
+(    while time.time\(\) < end_time:) s
+5 274 M
+(        sys.stdout.write\(f"\\r {chars[i % len\(chars\)]} The AI is sketching... \(Funhouse PC is t) s
+5 263 M
+(oiling\) "\)) s
+5 252 M
+(        sys.stdout.flush\(\)) s
+5 241 M
+(        time.sleep\(0.1\)) s
+5 230 M
+(        i += 1) s
+5 219 M
+(    sys.stdout.write\("\\r \342\\234\250 Sketch complete! Finalizing...             \\n"\)) s
+5 197 M
+(def get_latest_article_info\(\):) s
+5 186 M
+(    """Pulls the prompt and slug from the most recent markdown file.""") s
+5 175 M
+(    files = [os.path.join\(OUTPUT_DIR, f\) for f in os.listdir\(OUTPUT_DIR\) if f.endswith\('.md'\)]) s
+5 164 M
+(    if not files: return None, None) s
+5 153 M
+(    latest_file = max\(files, key=os.path.getmtime\)) s
+5 142 M
+(    base_filename = os.path.splitext\(os.path.basename\(latest_file\)\)[0]) s
+5 131 M
+(    ) s
+5 120 M
+(    clean_slug = base_filename.replace\("web_", ""\).replace\("print_", ""\)) s
+5 109 M
+(    ) s
+5 98 M
+(    with open\(latest_file, 'r'\) as f:) s
+5 87 M
+(        content = f.read\(\)) s
+5 76 M
+(        if "IMAGE_PROMPT:" in content:) s
+5 65 M
+(            # Splits between IMAGE_PROMPT and the SLUG we moved to the end) s
+5 54 M
+(            prompt = content.split\("IMAGE_PROMPT:"\)[1].split\("SLUG:"\)[0].strip\(\)) s
+5 43 M
+(            return clean_slug, prompt) s
+5 32 M
+(    return None, None) s
+5 10 M
+(def generate_gemini_image\(prompt\):) s
+_R
+S
+%%Page: (2) 2
+%%BeginPageSetup
+_S
+18 36 translate
+/pagenum 2 def
+/fname (artimage.py) def
+/fdir (.) def
+/ftail (artimage.py) def
+% User defined strings:
+/fmodstr (Thu Mar 19 00:09:57 2026) def
+/pagenumstr (2) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 692 M
+(    """The core 4.0 Fast generation logic.""") s
+5 681 M
+(    try:) s
+5 670 M
+(        sweating_spinner\(6\) ) s
+5 659 M
+(        final_prompt = f"""{STYLE_BLOCK}) s
+5 637 M
+(        Scene: {prompt}""") s
+5 615 M
+(        print\("\\n\360\\237\247\252 FINAL PROMPT \(Gemini\):\\n", final_prompt, "\\n"\)) s
+5 593 M
+(        response = client.models.generate_images\() s
+5 582 M
+(            model='imagen-4.0-fast-generate-001',) s
+5 571 M
+(            prompt=final_prompt,) s
+5 560 M
+(            config=types.GenerateImagesConfig\() s
+5 549 M
+(                number_of_images=1,) s
+5 538 M
+(                output_mime_type='image/png') s
+5 527 M
+(            \)) s
+5 516 M
+(        \)) s
+5 505 M
+(        return response.generated_images[0]) s
+5 494 M
+(        ) s
+5 483 M
+(    except Exception as e:) s
+5 472 M
+(        print\(f"\\n\342\\235\\214 Gemini 4.0 Grumbled: {e}"\)) s
+5 461 M
+(        return None) s
+5 439 M
+(def generate_siliconflow_image\(prompt\):) s
+5 428 M
+(    """The Economy Class: Flux.1-schnell via SiliconFlow \(~$0.0014\).""") s
+5 417 M
+(    url = "https://api.siliconflow.com/v1/images/generations") s
+5 406 M
+(    api_key = os.getenv\('SILICONFLOW_API_KEY'\)) s
+5 395 M
+(    ) s
+5 384 M
+(    headers = {) s
+5 373 M
+(        "Authorization": f"Bearer {api_key}",) s
+5 362 M
+(        "Content-Type": "application/json") s
+5 351 M
+(    }) s
+5 340 M
+(    final_prompt = f"""{STYLE_BLOCK}) s
+5 318 M
+(    Scene: {prompt}""") s
+5 296 M
+(    print\("\\n\360\\237\247\252 FINAL PROMPT \(Flux\):\\n", final_prompt, "\\n"\)) s
+5 274 M
+(    payload = {) s
+5 263 M
+(        "model": "black-forest-labs/FLUX.1-schnell",) s
+5 252 M
+(        "prompt": final_prompt,) s
+5 241 M
+(        "batch_size": 1) s
+5 230 M
+(    }) s
+5 219 M
+(    ) s
+5 208 M
+(    try:) s
+5 197 M
+(        sweating_spinner\(4\) ) s
+5 186 M
+(        response = requests.post\(url, json=payload, headers=headers\)) s
+5 175 M
+(        response.raise_for_status\(\)) s
+5 164 M
+(        data = response.json\(\)) s
+5 153 M
+(        ) s
+5 142 M
+(        # SiliconFlow returns a URL; we download the bytes from it) s
+5 131 M
+(        image_url = data['images'][0]['url']) s
+5 120 M
+(        img_response = requests.get\(image_url\)) s
+5 109 M
+(        return img_response.content ) s
+5 98 M
+(    except Exception as e:) s
+5 87 M
+(        print\(f"\\n\342\\235\\214 SiliconFlow Grumbled: {e}"\)) s
+5 76 M
+(        return None) s
+5 54 M
+(from PIL import Image) s
+5 32 M
+(def add_logo_watermark\(image_path, logo_path, position="bottom-right", opacity=100, margin=10\)) s
+5 21 M
+(:) s
+5 10 M
+(    base = Image.open\(image_path\).convert\("RGBA"\)) s
+_R
+S
+%%Page: (3) 3
+%%BeginPageSetup
+_S
+18 36 translate
+/pagenum 3 def
+/fname (artimage.py) def
+/fdir (.) def
+/ftail (artimage.py) def
+% User defined strings:
+/fmodstr (Thu Mar 19 00:09:57 2026) def
+/pagenumstr (3) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 692 M
+(    logo = Image.open\(logo_path\).convert\("RGBA"\)) s
+5 670 M
+(    # Resize logo \(15% of image width\)) s
+5 659 M
+(    base_width, base_height = base.size) s
+5 648 M
+(    max_logo_width = int\(base_width * 0.15\)) s
+5 637 M
+(    wpercent = max_logo_width / float\(logo.size[0]\)) s
+5 626 M
+(    hsize = int\(\(float\(logo.size[1]\) * wpercent\)\)) s
+5 615 M
+(    logo = logo.resize\(\(max_logo_width, hsize\), Image.LANCZOS\)) s
+5 593 M
+(    # Apply opacity) s
+5 582 M
+(    alpha = logo.split\(\)[3]) s
+5 571 M
+(    alpha = alpha.point\(lambda p: p * \(opacity / 255\)\)) s
+5 560 M
+(    logo.putalpha\(alpha\)) s
+5 538 M
+(    # Positioning) s
+5 527 M
+(    if position == "bottom-right":) s
+5 516 M
+(        x = base_width - logo.width - margin) s
+5 505 M
+(        y = base_height - logo.height - margin) s
+5 494 M
+(    elif position == "bottom-left":) s
+5 483 M
+(        x = margin) s
+5 472 M
+(        y = base_height - logo.height - margin) s
+5 461 M
+(    elif position == "top-right":) s
+5 450 M
+(        x = base_width - logo.width - margin) s
+5 439 M
+(        y = margin) s
+5 428 M
+(    elif position == "top-left":) s
+5 417 M
+(        x = margin) s
+5 406 M
+(        y = margin) s
+5 395 M
+(    else:) s
+5 384 M
+(        x = \(base_width - logo.width\) // 2) s
+5 373 M
+(        y = \(base_height - logo.height\) // 2) s
+5 351 M
+(    # Paste logo) s
+5 340 M
+(    base.paste\(logo, \(x, y\), logo\)) s
+5 318 M
+(    # Save over original) s
+5 307 M
+(    base.convert\("RGB"\).save\(image_path\)) s
+5 285 M
+(def save_and_optimize\(img_bytes, article_name, is_premium=False\):) s
+5 274 M
+(    """The logic center for bytes, mogrify, and the aligned ledger.""") s
+5 263 M
+(    timestamp = datetime.now\(\).strftime\("%H%M%S"\)) s
+5 252 M
+(    base_name = f"{article_name}_{timestamp}") s
+5 241 M
+(    ) s
+5 230 M
+(    local_png = os.path.join\(LOCAL_ART_DIR, f"{base_name}.png"\)) s
+5 219 M
+(    raw_png = os.path.join\(RAW_DIR, f"{base_name}.png"\)) s
+5 208 M
+(    ) s
+5 197 M
+(    # We expect raw bytes here!) s
+5 186 M
+(    if not isinstance\(img_bytes, \(bytes, bytearray\)\):) s
+5 175 M
+(         print\(f"\342\\235\\214 Error: save_and_optimize received {type\(img_bytes\)}, not bytes."\)) s
+5 164 M
+(         return) s
+5 142 M
+(    # Save RAW files) s
+5 131 M
+(    with open\(local_png, 'wb'\) as f: f.write\(img_bytes\)) s
+5 120 M
+(    with open\(raw_png, 'wb'\) as f: f.write\(img_bytes\)) s
+5 109 M
+(    # --- APPLY LOGO WATERMARK ---) s
+5 98 M
+(    logo_path = "/home/paul/TabloidProject/website/public/images/ELYU_Herald_Colored.png"  # <) s
+5 87 M
+(-- UPDATE THIS PATH) s
+5 76 M
+(    add_logo_watermark\(local_png, logo_path, position="bottom-right", opacity=100, margin=10\)) s
+5 65 M
+(    add_logo_watermark\(raw_png, logo_path, position="bottom-right", opacity=100, margin=10\)) s
+5 54 M
+(    ) s
+5 43 M
+(    # Mogrify for the web) s
+5 32 M
+(    print\(f"\360\\237\\223\246 Mogrifying for the Herald..."\)) s
+5 21 M
+(    mogrify_cmd = \() s
+5 10 M
+(        f"cd {WEB_BASE_DIR} && mogrify -path public/images/ ") s
+_R
+S
+%%Page: (4) 4
+%%BeginPageSetup
+_S
+18 36 translate
+/pagenum 4 def
+/fname (artimage.py) def
+/fdir (.) def
+/ftail (artimage.py) def
+% User defined strings:
+/fmodstr (Thu Mar 19 00:09:57 2026) def
+/pagenumstr (4) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 692 M
+(        f"-auto-orient -resize 600x -strip -format jpg ") s
+5 681 M
+(        f"public/images/raw/{base_name}.png") s
+5 670 M
+(    \)) s
+5 659 M
+(    os.system\(mogrify_cmd\)) s
+5 637 M
+(    # Clipboard magic) s
+5 626 M
+(    clipboard_text = f"/images/{base_name}.jpg") s
+5 615 M
+(    os.system\(f"echo -n '{clipboard_text}' | xclip -selection clipboard"\)) s
+5 593 M
+(    print\("-" * 40\)) s
+5 582 M
+(    print\(f"\342\\234\\205 SUCCESS: {article_name} illustrated."\)) s
+5 571 M
+(    print\(f"\360\\237\\223\\213 Copied: {clipboard_text}"\)) s
+5 560 M
+(    print\("-" * 40\)) s
+5 538 M
+(    # --- THE ALIGNED LEDGER ---) s
+5 527 M
+(    log_file = os.path.join\(OUTPUT_DIR, "gemini_cost_log.csv"\)) s
+5 516 M
+(    file_exists = os.path.isfile\(log_file\)) s
+5 505 M
+(    ) s
+5 494 M
+(    cost = "0.020000" if is_premium else "0.001400") s
+5 483 M
+(    model_label = "imagen-4.0-fast" if is_premium else "flux.1-schnell") s
+5 461 M
+(    with open\(log_file, "a", newline=""\) as f:) s
+5 450 M
+(        writer = csv.writer\(f\)) s
+5 439 M
+(        if not file_exists:) s
+5 428 M
+(            writer.writerow\(["timestamp", "model", "mode", "input_tokens", "output_tokens", "t) s
+5 417 M
+(otal_tokens", "input_cost", "output_cost", "total_cost"]\)) s
+5 406 M
+(        ) s
+5 395 M
+(        writer.writerow\([) s
+5 384 M
+(            datetime.now\(\).strftime\("%Y-%m-%d %H:%M"\), ) s
+5 373 M
+(            model_label,                         ) s
+5 362 M
+(            "VISUAL",                                  ) s
+5 351 M
+(            "", "", "",                                ) s
+5 340 M
+(            "", "",                                    ) s
+5 329 M
+(            cost                                 ) s
+5 318 M
+(        ]\)) s
+5 307 M
+(    ) s
+5 296 M
+(if __name__ == "__main__":) s
+5 285 M
+(    parser = argparse.ArgumentParser\(description="ELYU Herald Art Department"\)) s
+5 274 M
+(    parser.add_argument\("--manual", action="store_true", help="Manually enter an image prompt") s
+5 263 M
+(\)) s
+5 252 M
+(    parser.add_argument\("--premium", action="store_true", help="Use Gemini 4.0 instead of Sili) s
+5 241 M
+(conFlow"\)) s
+5 230 M
+(    args = parser.parse_args\(\)) s
+5 208 M
+(    # Safety Check for Keys) s
+5 197 M
+(    if not os.getenv\("GEMINI_API_KEY"\) or not os.getenv\("SILICONFLOW_API_KEY"\):) s
+5 186 M
+(        print\("\342\\235\\214 Error: API Keys missing in environment. Check your .bashrc!"\)) s
+5 175 M
+(        sys.exit\(\)) s
+5 153 M
+(    article_name, prompt = \(None, None\)) s
+5 131 M
+(    # 1. Determine the Prompt \(Manual vs Auto\)) s
+5 120 M
+(    if args.manual:) s
+5 109 M
+(        print\("\\n\360\\237\\216\250 --- MANUAL ART ENTRY ---"\)) s
+5 98 M
+(        article_name = input\("Enter a name/slug for this image: "\).strip\(\)) s
+5 87 M
+(        prompt = input\("Describe your vision: "\).strip\(\)) s
+5 76 M
+(    else:) s
+5 65 M
+(        article_name, prompt = get_latest_article_info\(\)) s
+5 43 M
+(    ) s
+5 32 M
+(    # 2. Execute Generation) s
+5 21 M
+(    if prompt:) s
+5 10 M
+(        img_bytes = None) s
+_R
+S
+%%Page: (5) 5
+%%BeginPageSetup
+_S
+18 36 translate
+/pagenum 5 def
+/fname (artimage.py) def
+/fdir (.) def
+/ftail (artimage.py) def
+% User defined strings:
+/fmodstr (Thu Mar 19 00:09:57 2026) def
+/pagenumstr (5) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 692 M
+(        current_premium_status = args.premium # Keep track for the ledger) s
+5 670 M
+(        if args.premium:) s
+5 659 M
+(            print\("\360\\237\\222\\216 Using Premium Engine \(Gemini 4.0\)..."\)) s
+5 648 M
+(            img_obj = generate_gemini_image\(prompt\)) s
+5 637 M
+(            if img_obj:) s
+5 626 M
+(                img_bytes = getattr\(img_obj, 'image_bytes', None\) or getattr\(img_obj, 'image',) s
+5 615 M
+( None\)) s
+5 604 M
+(        else:) s
+5 593 M
+(            print\("\360\\237\\232\\200 Using Economy Engine \(SiliconFlow Flux\)..."\)) s
+5 582 M
+(            img_bytes = generate_siliconflow_image\(prompt\)) s
+5 571 M
+(            ) s
+5 560 M
+(            if not img_bytes:) s
+5 549 M
+(                print\("\342\\232\240\357\270\\217 SiliconFlow failed. Falling back to Gemini Premium..."\)) s
+5 538 M
+(                img_obj = generate_gemini_image\(prompt\)) s
+5 527 M
+(                current_premium_status = True # We are now using premium!) s
+5 516 M
+(                if img_obj:) s
+5 505 M
+(                    # Extract bytes from the Gemini response structure) s
+5 494 M
+(                    img_bytes = getattr\(img_obj, 'image_bytes', None\) or getattr\(img_obj, 'ima) s
+5 483 M
+(ge', None\)) s
+5 461 M
+(        if img_bytes:) s
+5 450 M
+(            save_and_optimize\(img_bytes, article_name, is_premium=current_premium_status\)) s
+5 439 M
+(        else:) s
+5 428 M
+(            print\("\342\\235\\214 Critical Error: No image data could be generated by any engine."\)) s
+_R
+S
+%%Trailer
+%%Pages: 5
+%%DocumentNeededResources: font Courier-Bold Courier 
+%%EOF

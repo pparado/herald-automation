@@ -1,0 +1,20 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Secrets / environment
+.env
+
+# Generated outputs (from your pipeline)
+outputs/*.md
+
+# Backups
+*.bak
+
+# Prompt / reference docs (no longer needed in repo)
+sysprompt_for_image/
+style_block/
+
+# Virtual env accidentally created inside inputs
+inputs/env/
