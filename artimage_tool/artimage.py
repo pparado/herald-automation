@@ -170,7 +170,7 @@ def save_and_optimize(img_bytes, article_name, is_premium):
     web_path = f"/images/{base_filename}.jpg"
     os.system(f"echo -n '{web_path}' | xclip -selection clipboard")
     
-    cost = "$0.020000" if is_premium else "$0.001400"
+    cost = f"{0.020000:.6f}" if is_premium else f"{0.001400:.6f}"
     log_file = os.path.join(OUTPUT_DIR, "gemini_cost_log.csv")
     with open(log_file, "a", newline="") as f:
         csv.writer(f).writerow([
