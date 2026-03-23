@@ -23,7 +23,7 @@ OUTPUT_DIR = os.path.expanduser("~/herald-automation/outputs")
 LOGO_PATH = "/home/paul/TabloidProject/website/public/images/ELYU_Herald_Colored.png"
 
 # --- THE HERALD STYLE BLOCK ---
-STYLE_BLOCK = """Professional black-and-white editorial newspaper illustration. 
+STYLE_BLOCK = """Colored pencil drawing caricature. 
 Clean, confident line art with medium line weight on a pristine, unblemished white paper background. 
 Use a single spot color only to emphasize the main subject. 
 Minimal shading, high contrast, ample white space. 
