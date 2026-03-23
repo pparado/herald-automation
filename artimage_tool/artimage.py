@@ -185,7 +185,7 @@ def save_and_optimize(img_bytes, article_name, is_premium):
     # --- THE SUCCESS BOX ---
     box_width = 60
     print("\n" + "╔" + "═" * (box_width - 2) + "╗")
-    print(f"║ {'🎨 HERALD ART DEPARTMENT - JOB COMPLETE':^{box_width-4}} ║")
+    print(f"║ {'🎨 ELYU HERALD ART DEPARTMENT - JOB COMPLETE':^{box_width-4}} ║")
     print("╠" + "═" * (box_width - 2) + "╣")
     print(f"║  📂 Path:  {web_path:<46} ║")
     print(f"║  🤖 Model: {model_name:<46} ║")

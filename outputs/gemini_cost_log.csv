@@ -233,3 +233,9 @@ timestamp,Model,mode,input_tokens,output_tokens,total_tokens,input_cost,output_c
 2026-03-23 11:33,gemini-2.5-flash-lite,WEB,1685,473,2158,0.000169,0.000189,0.000358
 2026-03-23 11:34,flux.1,VISUAL,,,,,,0.001400
 2026-03-23 11:41,imagen-4.0,VISUAL,,,,,,0.020000
+2026-03-23 19:50,gemini-2.5-flash-lite,WEB,1314,403,1717,0.000131,0.000161,0.000293
+2026-03-23 19:51,imagen-4.0,VISUAL,,,,,,0.020000
+2026-03-23 20:14,imagen-4.0,VISUAL,,,,,,0.020000
+2026-03-23 20:21,flux.1,VISUAL,,,,,,0.001400
+2026-03-23 20:28,flux.1,VISUAL,,,,,,0.001400
+2026-03-23 20:34,imagen-4.0,VISUAL,,,,,,0.020000
